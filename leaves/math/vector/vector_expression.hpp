@@ -159,7 +159,7 @@ namespace leaves { namespace math
 		const_reference get() const
 		{
 			static_assert(Index < size, "vector_proxy::get");
-			return vector_(indexor_type::get<Index>());
+			return vector_.get<indexor_type::get<Index>::value>();
 		}
 
 		using vector_expression<this_type>::operator();

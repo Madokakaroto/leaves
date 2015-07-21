@@ -61,7 +61,7 @@ namespace leaves { namespace math
 		this_type& operator= (vector_expression<ExprT> const& ve)
 		{
 			vector_assign<scalar_assign>(*this, get_expression(ve));
-			return *this
+			return *this;
 		}
 
 		template <typename ExprT>

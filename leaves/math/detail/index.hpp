@@ -12,13 +12,21 @@ namespace leaves { namespace math
 
 		static const size_t size = sizeof...(PLs);
 
+		//template <size_t Index>
+		//static size_t const get()
+		//{
+		//	static_assert(Index < size, "indexor::get");
+		//
+		//	typedef typelist::type_at_t<place_hodlers, Index> place_holder_type;
+		//	return place_holder_type::value;
+		//}
+
 		template <size_t Index>
-		static size_t get()
+		struct get
 		{
 			static_assert(Index < size, "indexor::get");
-
 			typedef typelist::type_at_t<place_hodlers, Index> place_holder_type;
-			return place_holder_type::value;
-		}
+			static const size_t value = place_holder_type::value;
+		};
 	};
 } }
