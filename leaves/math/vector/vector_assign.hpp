@@ -94,6 +94,39 @@ namespace leaves{ namespace math
 				unroll<0, size - 1>::apply(v, args...);
 			}
 		};
+
+		template <typename FuncT, typename VectorT, typename ScalarT>
+		struct assign_uniform_impl
+		{
+			static const size_t size = VectorT::size;
+
+			template <size_t Begin, size_t End>
+			struct unroll
+			{
+				static_assert(Begin < End, "");
+
+				static void apply(VectorT& v, ScalarT s)
+				{
+					FuncT::apply(v(Begin), s);
+					unroll<Begin + 1, End>::apply(v, s);
+				}
+			};
+
+			template <size_t End>
+			struct unroll<End, End>
+			{
+				static void apply(VectorT& v, ScalarT s)
+				{
+					FuncT::apply(v(End), s);
+				}
+			};
+
+			static auto apply(VectorT& v, ScalarT s)
+				-> std::enable_if_t<size != 0>
+			{
+				unroll<0, size - 1>::apply(v, s);
+			}
+		};
 	}
 
 	template
@@ -132,5 +165,23 @@ namespace leaves{ namespace math
 			vector_expr_type, Args...> impl_type;
 
 		impl_type::apply( get_expression(vec), args...);
+	}
+
+	template 
+	<
+		template <typename T1, typename T2> class Func,
+		typename ExprT, typename ScalarT
+	>
+	std::enable_if_t<is_scalar<ScalarT>::value> vector_assign_uniform(vector_expression<ExprT>& vec, ScalarT s)
+	{
+		typedef ExprT vector_expr_type;
+		typedef typename vector_expr_type::value_type l_value_type;
+		typedef ScalarT r_value_type;
+		typedef Func<l_value_type, r_value_type> functor_type;
+
+		typedef vector_detail::assign_uniform_impl<functor_type,
+			vector_expr_type, ScalarT> impl_type;
+
+		impl_type::apply(get_expression(vec), s);
 	}
 } }

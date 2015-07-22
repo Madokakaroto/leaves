@@ -167,4 +167,180 @@ namespace leaves { namespace math
 		typedef typename vector_binary_traits<ExprLeftT, ExprRightT, scalar_div>::result expression_type;
 		return expression_type{ get_expression(lhs), get_expression(rhs) };
 	}
+
+	template 
+	<
+		typename ExprT,
+		typename ScalarT,
+		template <typename, typename> class ScalarBinary
+	>
+	class vector_scalar_r
+		: public vector_expression<vector_scalar_r<ExprT, ScalarT, ScalarBinary> >
+	{
+		typedef vector_scalar_r<ExprT, ScalarT, ScalarBinary> this_type;
+	public:
+		typedef ExprT l_expression_type;
+		typedef ScalarT scalar_type;
+		typedef typename l_expression_type::value_type l_value_type;
+		typedef ScalarBinary<l_value_type, scalar_type> function_type;
+		typedef typename function_type::return_type value_type;
+		typedef value_type const_reference;
+		typedef const_reference reference;
+		typedef typename l_expression_type::base_tag base_tag;
+		static const size_type size = l_expression_type::size;
+	public:
+
+		vector_scalar_r(l_expression_type& e, scalar_type s)
+			: e_(e)
+			, s_(s)
+		{
+		}
+
+		const_reference operator() (size_type index) const
+		{
+			return function_type::apply(e_(index), s_);
+		}
+
+		template <size_type Index>
+		const_reference get() const
+		{
+			return function_type::apply(e_.get<Index>(), s_);
+		}
+
+		using vector_expression<this_type>::operator();
+
+	private:
+		l_expression_type&	e_;
+		scalar_type			s_;
+	};
+
+	template
+	<
+		typename ExprT,
+		typename ScalarT,
+		template <typename, typename> class ScalarBinary
+	>
+	struct vector_scalar_r_traits
+	{
+	private:
+		typedef std::add_const_t<ExprT> l_expression_type;
+		typedef ScalarT scalar_type;
+		typedef vector_scalar_r<l_expression_type, scalar_type, ScalarBinary> expression_type;
+	public:
+		typedef expression_type result;
+	};
+
+	template <typename ExprT, typename ScalarT,
+		typename = std::enable_if_t<is_scalar<ScalarT>::value> >
+	auto operator * (vector_expression<ExprT> const& e, ScalarT s)
+		-> typename vector_scalar_r_traits<ExprT, ScalarT, scalar_mult>::result
+	{
+		typedef typename vector_scalar_r_traits<ExprT, ScalarT, scalar_mult>::result expression_type;
+		return expression_type( get_expression(e), s );
+	}
+
+	template <typename ExprT, typename ScalarT,
+		typename = std::enable_if_t<is_scalar<ScalarT>::value> >
+	auto operator / (vector_expression<ExprT> const& e, ScalarT s)
+		-> typename vector_scalar_r_traits<ExprT, ScalarT, scalar_div>::result
+	{
+		typedef typename vector_scalar_r_traits<ExprT, ScalarT, scalar_div>::result expression_type;
+		return expression_type{ get_expression(e), s };
+	}
+
+	template 
+	<
+		typename ScalarT,
+		typename ExprT,
+		template <typename, typename> class ScalarBinary
+	>
+	class vector_scalar_l
+		: public vector_expression<vector_scalar_l<ScalarT, ExprT, ScalarBinary> >
+	{
+		typedef vector_scalar_l<ScalarT, ExprT, ScalarBinary> this_type;
+	public:
+		typedef ScalarT scalar_type;
+		typedef ExprT r_expression_type;
+		typedef typename r_expression_type::value_type r_value_type;
+		typedef ScalarBinary<scalar_type, r_value_type> function_type;
+		typedef typename function_type::return_type value_type;
+		typedef value_type const_reference;
+		typedef const_reference reference;
+		typedef typename r_expression_type::base_tag base_tag;
+		static const size_type size = r_expression_type::size;
+	public:
+
+		vector_scalar_l(scalar_type s, r_expression_type& e)
+			: s_(s)
+			, e_(e)
+		{
+		}
+
+		const_reference operator() (size_type index) const
+		{
+			return function_type::apply(s_, e_(index));
+		}
+
+		template <size_type Index>
+		const_reference get() const
+		{
+			return function_type::apply(s_, e_.get<Index>());
+		}
+
+		using vector_expression::operator();
+
+	private:
+		scalar_type			s_;
+		r_expression_type&	e_;
+	};
+
+	template
+	<
+		typename ScalarT,
+		typename ExprT,
+		template <typename, typename> class ScalarBinary
+	>
+	struct vector_scalar_l_traits
+	{
+	private:
+		typedef std::add_const_t<ExprT> r_expression_type;
+		typedef ScalarT scalar_type;
+		typedef vector_scalar_l<scalar_type, r_expression_type, ScalarBinary> expression_type;
+	public:
+		typedef expression_type result;
+	};
+
+	template <typename ScalarT, typename ExprT, 
+		typename = std::enable_if_t<is_scalar<ScalarT>::value> >
+	auto operator * (ScalarT s, vector_expression<ExprT> const& e)
+		-> typename vector_scalar_l_traits<ScalarT, ExprT, scalar_mult>::result
+	{
+		typedef typename vector_scalar_l_traits<ScalarT, ExprT, scalar_mult>::result expression_type;
+		return expression_type{ s, get_expression(e) };
+	}
+
+	namespace vector_detail
+	{
+
+	}
+
+	template
+	<	
+		typename ExprLeftT,
+		typename ExprRightT,
+		template <typename, typename> class ScalarBinary
+	>
+	class map_vector_to_scalar
+		: public vector_expression<map_vector_to_scalar<ExprLeftT, ExprRightT, ScalarBinary> >
+	{
+		typedef map_vector_to_scalar<ExprLeftT, ExprRightT, ScalarBinary> this_type;
+	public:
+		typedef ExprLeftT l_expression_type;
+		typedef ExprRightT r_expression_type;
+		typedef typename l_expression_type::value_type l_value_type;
+		typedef typename r_expression_type::value_type r_value_type;
+		typename ScalarBinary<l_value_type, r_value_type> 
+	private:
+
+	};
 } }

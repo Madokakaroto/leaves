@@ -81,9 +81,7 @@ namespace leaves { namespace math
 			std::is_const<T>::value,
 			const_reference,
 			value_type& >;
-
-		using const_clousre_type = scalar_reference<const self_type> const;
-		using clousre_type = scalar_reference<self_type>;
+		static size_type const size = 1;
 		
 		explicit scalar_value(value_type value)
 			: value_(value)
@@ -106,11 +104,6 @@ namespace leaves { namespace math
 		{
 			value_ = other;
 			return *this;
-		}
-
-		bool same_closure(self_type const& other) const
-		{
-			return this == &other;
 		}
 
 	private:

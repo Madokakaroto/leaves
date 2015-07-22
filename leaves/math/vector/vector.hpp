@@ -25,7 +25,10 @@ namespace leaves { namespace math
 
 		vector() = default;
 
-		explicit vector(const_reference uniform_value);
+		explicit vector(const_reference uniform_value)
+		{
+			vector_assign_uniform<scalar_assign>(*this, uniform_value);
+		}
 
 		template <typename Arg0, typename ... Args,
 			typename = std::enable_if_t<check_ctor_param<size, Arg0, Args...>::value> >
