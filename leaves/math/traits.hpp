@@ -77,8 +77,25 @@ namespace leaves { namespace math
 		static const bool value = is_signed && is_arithmetic && !is_const && !is_reference;
 	};
 
-	template <typename T>
-	struct is_place_holder : std::false_type
+	template <size_t Index>
+	struct argument
 	{
+		template <typename Arg0, typename ... Args>
+		static auto get(Arg0 arg0, Args ... args)
+			-> decltype(argument<Index - 1>::get(args...))
+		{
+			return argument<Index - 1>::get(args...);
+		}
 	};
+
+	template <>
+	struct argument<0>
+	{
+		template <typename Arg0, typename ... Args>
+		static Arg0 get(Arg0 arg0, Args ... args)
+		{
+			return arg0;
+		}
+	};
+
 } }

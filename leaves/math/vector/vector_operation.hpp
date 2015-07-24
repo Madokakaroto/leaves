@@ -339,7 +339,8 @@ namespace leaves { namespace math
 		typedef ExprRightT r_expression_type;
 		typedef typename l_expression_type::value_type l_value_type;
 		typedef typename r_expression_type::value_type r_value_type;
-		typename ScalarBinary<l_value_type, r_value_type> 
+		typename ScalarBinary<l_value_type, r_value_type> function_type;
+
 	private:
 
 	};
