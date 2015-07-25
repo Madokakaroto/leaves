@@ -3,136 +3,181 @@
 #include "traits.hpp"
 #include "place_holder.hpp"
 #include "evaluate.hpp"
-#include "functional.hpp"
 #include "expression.hpp"
+#include "functional.hpp"
 
 namespace leaves { namespace math
 {
-	template <typename ScalarT, std::size_t Size, typename BaseT>
-	class vector : public vector_expression<vector<ScalarT, Size, BaseT>>
+	// T is represent a scalar type
+	// B is short for base 
+	template <typename T, size_type Size, typename B>
+	class vector : public vector_expression<vector<T, Size, B> >
 	{
-		typedef vector<ScalarT, Size, BaseT> this_type;
+		typedef vector<T, Size, B> this_type;
 	public:
-		typedef std::enable_if_t<is_scalar<ScalarT>::value, ScalarT> value_type;
+		static_assert(is_scalar<T>::value, "");
+		typedef T value_type;
 		typedef value_type& reference;
-		typedef value_type const_reference;
 		typedef value_type array_type[Size];
-		typedef BaseT base_tag;
+		typedef B base_tag;
 		static const size_type size = Size;
-	
-	public: /* constructors */
+	public:
 
+		/*
+		 * default constructor
+		 */
 		vector() = default;
 
-	//	explicit vector(const_reference uniform_value)
-	//	{
-	//		vector_assign_uniform<scalar_assign>(*this, uniform_value);
-	//	}
-	//
-	//	template <typename Arg0, typename ... Args,
-	//		typename = std::enable_if_t<check_ctor_param<size, Arg0, Args...>::value> >
-	//	vector(Arg0 arg0, Args ... args
-	//	{
-	//		vector_assign_variadic<scalar_assign>(*this, arg0, args...);
-	//	}
-	//
-	//	vector(this_type const & other)
-	//	{
-	//		//data_ = other.data_;		// bite wise copy
-	//		::memcpy(&data_, &other.data_, sizeof(value_type) * size);
-	//	}
-	//
-	//	template <typename ExprT>
-	//	vector(vector_expression<ExprT> const& ve)
-	//		: base_type()
-	//	{
-	//		vector_assign<scalar_assign>(*this, get_expression(ve));
-	//	}
-	//
-	//public: /* operators with assign*/
-	//
-	//	this_type& operator= (this_type const& other)
-	//	{
-	//		//data_ = other.data_;		// bite wise copy
-	//		::memcpy(&data_, &other.data_, sizeof(value_type) * size);
-	//		return *this;
-	//	}
-	//
-	//	template <typename ExprT>
-	//	this_type& operator= (vector_expression<ExprT> const& ve)
-	//	{
-	//		vector_assign<scalar_assign>(*this, get_expression(ve));
-	//		return *this;
-	//	}
-	//
-	//	template <typename ExprT>
-	//	this_type& operator += (vector_expression<ExprT> const& ve)
-	//	{
-	//		vector_assign<scalar_add_assign>(*this, get_expression(ve));
-	//		return *this;
-	//	}
-	//
-	//	template <typename ExprT>
-	//	this_type& operator -= (vector_expression<ExprT> const& ve)
-	//	{
-	//		vector_assign<scalar_sub_assign>(*this, get_expression(ve));
-	//		return *this;
-	//	}
-	//
-	//	template <typename ExprT>
-	//	this_type& operator *= (vector_expression<ExprT> const& ve)
-	//	{
-	//		vector_assign<scalar_mult_assign>(*this, get_expression(ve));
-	//		return *this;
-	//	}
-	//
-	//	template <typename ExprT>
-	//	this_type& operator /= (vector_expression<ExprT> const& ve)
-	//	{
-	//		vector_assign<scalar_div_assign>(*this, get_expression(ve));
-	//		return *this;
-	//	}
-	//
-	//public: /* index and proxy */
-	//
-	//	value_type const* data() const
-	//	{
-	//		return &data_[0];
-	//	}
-	//
-	//	// dynamic indexing
-	//	reference operator() (size_type index)
-	//	{
-	//		return data_[index];
-	//	}
-	//
-	//	// dynamic indexing
-	//	const_reference operator() (size_type index) const
-	//	{
-	//		return data_[index];
-	//	}
-	//
-	//	// proxy
-	//	using vector_expression<this_type>::operator();
-	//
-	//	// static indexing
-	//	template <size_type Index>
-	//	reference get()
-	//	{
-	//		static_assert(Index < size, "vector::get");
-	//		return data_[Index];
-	//	}
-	//
-	//	// static indexing
-	//	template <size_type Index>
-	//	const_reference get() const
-	//	{
-	//		static_assert(Index < size, "vector::get");
-	//		return data_[Index];
-	//	}
+		/*
+		 * one param constructor
+		 */
+		explicit vector(value_type v)
+		{
+			evaluate<scalar_assign>(*this, v);
+		}
+	
+		/*
+		 * size params constructor
+		 */
+		template <typename Arg0, typename ... Args,
+			typename = std::enable_if_t<equal<size_type, argument_count<Arg0, Args...>::value, size>::value> >
+		vector(Arg0 arg0, Args ... args)
+		{
+			evaluate<scalar_assign>(*this, arg0, args...);
+		}
+	
+		/*
+		 * copy constructor
+		 */
+		vector(this_type const & other)
+		{
+			// bit wise copy
+			::memcpy(&data_, &other.data_, sizeof(value_type) * size);
+		}
+	
+		/*
+		 * evaluate when construct from another vector expression
+		 */
+		template <typename E_>
+		vector(vector_expression<E_> const& ve)
+		{
+			evaluate<scalar_assign>(*this, ve);
+		}
+	
+		/*
+		 * copy assign
+		 */
+		this_type& operator= (this_type const& other)
+		{
+			// bite wise copy
+			::memcpy(&data_, &other.data_, sizeof(value_type) * size);
+			return *this;
+		}
+	
+		/*
+		 * evalutate when assign with another expression
+		 */
+		template <typename E_>
+		this_type& operator= (vector_expression<E_> const& e)
+		{
+			evaluate<scalar_assign>(*this, get_expression(e));
+			return *this;
+		}
+	
+		/*
+		 * add assign 
+		 */
+		template <typename E_>
+		this_type& operator += (vector_expression<E_> const& e)
+		{
+			evaluate<scalar_add_assign>(*this, get_expression(e));
+			return *this;
+		}
+	
+		/*
+		 * sub assign
+		 */
+		template <typename E_>
+		this_type& operator -= (vector_expression<E_> const& e)
+		{
+			evaluate<scalar_sub_assign>(*this, get_expression(e));
+			return *this;
+		}
+	
+		/*
+		 * multiply assign
+		 */
+		template <typename E_>
+		this_type& operator *= (vector_expression<E_> const& e)
+		{
+			evaluate<scalar_mult_assign>(*this, get_expression(e));
+			return *this;
+		}
+	
+		/*
+		 * divide assign
+		 */
+		template <typename E_>
+		this_type& operator /= (vector_expression<E_> const& e)
+		{
+			evaluate<scalar_div_assign>(*this, get_expression(e));
+			return *this;
+		}
+
+		/*
+		 * scalar mult assign
+		 */
+		this_type& operator *= (value_type v)
+		{
+			return *this;
+		}
+
+		/*
+		 * scalar divide assign
+		 */
+		this_type& operator /= (value_type v)
+		{
+			return *this;
+		}
+
+		// get the data buffer
+		value_type const* data() const
+		{
+			return &data_[0];
+		}
+	
+		// dynamic indexing
+		reference operator() (size_type index)
+		{
+			return data_[index];
+		}
+
+		// dynamic indexing
+		value_type operator() (size_type index) const
+		{
+			return data_[index];
+		}
+
+		// static indexing
+		template <size_type Index>
+		reference get()
+		{
+			static_assert(Index < size, "vector::get");
+			return data_[Index];
+		}
+
+		// static indexing
+		template <size_type Index>
+		value_type get() const
+		{
+			static_assert(Index < size, "vector::get");
+			return data_[Index];
+		}
+
+		// proxy
+		using vector_expression<this_type>::operator();
 
 	private:
-
 		array_type			data_;
 	};
 } }

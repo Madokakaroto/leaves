@@ -8,21 +8,31 @@
 namespace
 {
 	template <typename T>
+	T leaves_numeric_inverse(T t)
+	{
+		return T{1} / t;
+	}
+
+	template <typename T>
+	T leaves_numeric_square(T t)
+	{
+		return t * t;
+	}
+
+	template <typename T>
 	T leaves_numeric_sqrt(T t)
 	{
 		return std::sqrt(t);
 	}
 
 	template <typename T>
-	auto leaves_numeric_abs(T const& t)
-		-> std::enable_if_t<!std::is_unsigned<T>::value, T>
+	T leaves_numeric_abs(T t)
 	{
-		return std::abs(t)
+		return std::abs(t);
 	}
 
 	template <typename T>
-	auto leaves_numeric_abs(T const& t)
-		-> std::enable_if_t<std::is_unsigned<T>::value, T>
+	T leaves_numeric_positive(T t)
 	{
 		return t;
 	}
@@ -30,6 +40,8 @@ namespace
 
 namespace leaves { namespace math 
 {
+	typedef std::size_t size_type;
+
 	template <typename T, typename P>
 	struct promotion_traits
 	{
@@ -98,4 +110,21 @@ namespace leaves { namespace math
 		}
 	};
 
+	template <typename ... Args>
+	struct argument_count
+	{
+		static size_type const value = sizeof...(Args);
+	};
+
+	template <typename T, T M, T N>
+	struct bigger_than
+	{
+		static bool const value = M > N;
+	};
+
+	template <typename T, T M, T N>
+	struct equal
+	{
+		static bool const value = M == N;
+	};
 } }

@@ -21,34 +21,25 @@ namespace leaves { namespace math
 			{
 				static_assert(Begin < End, "Begin >= End");
 
-				static void apply(left_expression_type&& e1, right_expression_type&& e2)
+				static void apply(left_expression_type& e1, right_expression_type const& e2)
 				{
-					function_type::apply(
-						get<Begin>(std::forward<left_expression_type>(e1)),
-						get<Begin>(std::forward<right_expression_type>(e2)));
-
-					unroll<Begin + 1, End>::apply(
-						std::forward<left_expression_type>(e1), 
-						std::forward<right_expression_type>(e2));
+					function_type::apply(e1.get<Begin>(), e2.get<Begin>());
+					unroll<Begin + 1, End>::apply(e1, e2);
 				}
 			};
 
 			template <size_type End>
 			struct unroll<End, End>
 			{
-				static void apply(left_expression_type&& e1, right_expression_type&& e2)
+				static void apply(left_expression_type& e1, right_expression_type const& e2)
 				{
-					function_type::apply(
-						get<End>(std::forward<left_expression_type>(e1)),
-						get<End>(std::forward<right_expression_type>(e2)));
+					function_type::apply(e1.get<End>(), e2.get<End>());
 				}
 			};
 
-			static void apply(left_expression_type&& e1, right_expression_type&& e2)
+			static void apply(left_expression_type& e1, right_expression_type const& e2)
 			{
-				unroll<0, size - 1>::apply(
-					std::forward<left_expression_type>(e1),
-					std::forward<right_expression_type>(e2));
+				unroll<0, size - 1>::apply(e1, e2);
 			}
 		};
 
@@ -66,26 +57,25 @@ namespace leaves { namespace math
 			{
 				static_assert(Begin < End, "Begin >= End");
 
-				static void apply(expression_type&& e, scalar_type scalar)
+				static void apply(expression_type& e, scalar_type scalar)
 				{
-					function_type::apply(get<Begin>(std::forward<expression_type>(e)), scalar);
-
-					unroll<Begin + 1, End>::apply(std::forward<expression_type>(e), scalar);
+					function_type::apply(e.get<Begin>(), scalar);
+					unroll<Begin + 1, End>::apply(e, scalar);
 				}
 			};
 
 			template <size_type End>
 			struct unroll<End, End>
 			{
-				static void apply(expression_type&& e, scalar_type scalar)
+				static void apply(expression_type& e, scalar_type scalar)
 				{
-					function_type::apply(get<End>(std::forward<expression_type>(e)), scalar);
+					function_type::apply(e.get<End>(), scalar);
 				}
 			};
 
-			static void apply(expression_type&& e, scalar_type scalar)
+			static void apply(expression_type& e, scalar_type scalar)
 			{
-				unroll<0, size - 1>::apply(std::forward<expression_type>(e), scalar);
+				unroll<0, size - 1>::apply(e, scalar);
 			}
 		};
 
@@ -95,7 +85,9 @@ namespace leaves { namespace math
 		{
 			typedef Func function_type;
 			typedef E expression_type;
-			typedef typename is_same<Args...>::type, scalar_type;
+			typedef typename is_same<Args...> same_traits_type;
+			static_assert(same_traits_type::value, "Must be the same type!");
+			typedef typename same_traits_type::type scalar_type;
 			static size_type const expression_size = expression_type::size;
 			static size_type const scalar_size = sizeof...(Args);
 			static_assert(expression_size == scalar_size, "Evaluation must have size the same!");
@@ -106,26 +98,26 @@ namespace leaves { namespace math
 			{
 				static_assert(Begin < End, "Begin >= End");
 
-				static void apply(expression_type&& e, Args ... args)
+				static void apply(expression_type& e, Args ... args)
 				{
-					function_type::apply(get<Begin>(
-						get<Begin>(std::forward<expression_type>(e)), 
-						argument<Begin>::get(args...));
-
-					unroll<Begin + 1, End>::apply(std::forward<expression_type>(e), args...);
+					function_type::apply(e.get<Begin>(), argument<Begin>::get(args...));
+					unroll<Begin + 1, End>::apply(e, args...);
 				}
 			};
 
 			template <size_type End>
 			struct unroll<End, End>
 			{
-				static void apply(expression_type&& e, Args ... args)
+				static void apply(expression_type& e, Args ... args)
 				{
-					function_type::apply(get<Begin>(
-						get<End>(std::forward<expression_type>(e)),
-						argument<End>::get(args...));
+					function_type::apply(e.get<End>(), argument<End>::get(args...));
 				}
 			};
+
+			static void apply(expression_type& e, Args ... args)
+			{
+				unroll<0, size - 1>::apply(e, args...);
+			}
 		};
 
 		// evaluate_vector_to_scalar
@@ -144,7 +136,7 @@ namespace leaves { namespace math
 
 				static result_type apply(expression_type const& e, result_type init)
 				{
-					return function_type::apply(get<Begin>(e), unroll<Begin + 1, End>::apply(e, init));
+					return function_type::apply(e.get<Begin>(), unroll<Begin + 1, End>::apply(e, init));
 				}
 			};
 
@@ -153,7 +145,7 @@ namespace leaves { namespace math
 			{
 				static result_type apply(expression_type const& e, result_type init)
 				{
-					return function_type::apply(get<End>(e), init);
+					return function_type::apply(e.get<End>(), init);
 				}
 			};
 

@@ -2,11 +2,11 @@
 
 namespace leaves { namespace math
 {
-	template <typename ExprT>
+	template <typename E>
 	class template_expression
 	{
 	public:
-		typedef ExprT expression_type;
+		typedef E expression_type;
 	protected:
 		template_expression() = default;
 		~template_expression() = default;
@@ -14,15 +14,15 @@ namespace leaves { namespace math
 		template_expression& operator= (template_expression const&) = delete;
 	};
 
-	template <typename ExprT>
-	auto get_expression(template_expression<ExprT>& expression) -> ExprT&
+	template <typename E>
+	auto get_expression(template_expression<E>& expression) -> E&
 	{
-		return static_cast<ExprT&>(expression);
+		return static_cast<E&>(expression);
 	}
 
-	template <typename ExprT>
-	auto get_expression(template_expression<ExprT> const& expression) ->ExprT const&
+	template <typename E>
+	auto get_expression(template_expression<E> const& expression) ->E const&
 	{
-		return static_cast<ExprT const&>(expression);
+		return static_cast<E const&>(expression);
 	}
 } }

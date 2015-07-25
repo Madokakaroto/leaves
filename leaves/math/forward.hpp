@@ -28,5 +28,4 @@ namespace leaves { namespace math
 
 	template <typename ExprT, typename IndexorT>
 	class vector_proxy;
-
 } }
