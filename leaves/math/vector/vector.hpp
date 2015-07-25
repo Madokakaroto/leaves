@@ -33,7 +33,7 @@ namespace leaves { namespace math
 		 */
 		explicit vector(value_type v)
 		{
-			evaluate<scalar_assign>(*this, v);
+			assign<scalar_assign>(*this, v);
 		}
 	
 		/*
@@ -43,7 +43,7 @@ namespace leaves { namespace math
 			typename = std::enable_if_t<equal<size_type, argument_count<Arg0, Args...>::value, size>::value> >
 		vector(Arg0 arg0, Args ... args)
 		{
-			evaluate<scalar_assign>(*this, arg0, args...);
+			assign<scalar_assign>(*this, arg0, args...);
 		}
 	
 		/*
@@ -61,7 +61,7 @@ namespace leaves { namespace math
 		template <typename E_>
 		vector(vector_expression<E_> const& ve)
 		{
-			evaluate<scalar_assign>(*this, ve);
+			assign<scalar_assign>(*this, ve);
 		}
 	
 		/*
@@ -80,7 +80,7 @@ namespace leaves { namespace math
 		template <typename E_>
 		this_type& operator= (vector_expression<E_> const& e)
 		{
-			evaluate<scalar_assign>(*this, get_expression(e));
+			assign<scalar_assign>(*this, get_expression(e));
 			return *this;
 		}
 	
@@ -90,7 +90,7 @@ namespace leaves { namespace math
 		template <typename E_>
 		this_type& operator += (vector_expression<E_> const& e)
 		{
-			evaluate<scalar_add_assign>(*this, get_expression(e));
+			assign<scalar_add_assign>(*this, get_expression(e));
 			return *this;
 		}
 	
@@ -100,7 +100,7 @@ namespace leaves { namespace math
 		template <typename E_>
 		this_type& operator -= (vector_expression<E_> const& e)
 		{
-			evaluate<scalar_sub_assign>(*this, get_expression(e));
+			assign<scalar_sub_assign>(*this, get_expression(e));
 			return *this;
 		}
 	
@@ -110,7 +110,7 @@ namespace leaves { namespace math
 		template <typename E_>
 		this_type& operator *= (vector_expression<E_> const& e)
 		{
-			evaluate<scalar_mult_assign>(*this, get_expression(e));
+			assign<scalar_mult_assign>(*this, get_expression(e));
 			return *this;
 		}
 	
@@ -120,7 +120,7 @@ namespace leaves { namespace math
 		template <typename E_>
 		this_type& operator /= (vector_expression<E_> const& e)
 		{
-			evaluate<scalar_div_assign>(*this, get_expression(e));
+			assign<scalar_div_assign>(*this, get_expression(e));
 			return *this;
 		}
 

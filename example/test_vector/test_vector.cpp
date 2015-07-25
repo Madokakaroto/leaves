@@ -1,5 +1,5 @@
 #include <leaves\math\vector.hpp>
-
+#include <iostream>
 void main()
 {
 	using float4 = leaves::math::vector<float, 4>;
@@ -98,5 +98,13 @@ void main()
 		float4 v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
 		float4 v2 = { 2.0f, 2.0f, 2.0f, 2.0f };
 		float3 v3 = (v1 + v2(_b, _g, _r, _w))(_r, _b, _g);
+	}
+
+	// dot product
+	{
+		float4 v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
+		float4 v2 = { 2.0f, 2.0f, 2.0f, 2.0f };
+		auto dot_prod = leaves::math::dot(v1, v2);
+		//std::cout << dot_prod << std::endl;
 	}
 }

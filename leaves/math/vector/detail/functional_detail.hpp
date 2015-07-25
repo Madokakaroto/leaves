@@ -39,4 +39,5 @@ namespace leaves { namespace math
 	public:
 		typedef expression_type result;
 	};
+
 } }

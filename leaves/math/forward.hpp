@@ -11,21 +11,30 @@ namespace leaves { namespace math
 	struct vector_tag{};
 	struct matrix_tag{};
 
+	// vector base tag
 	struct col_base{};
 	struct row_base{};
 
-	template <typename ExprT>
+	// matrix major tag
+	struct col_major{};
+	struct row_major{};
+
+	// template expression
+	template <typename E>
 	class template_expression;
 
-	template <typename ExprT>
+	template <typename E>
+	class scalar_expression;
+
+	template <typename E>
 	class vector_expression;
 
-	template <typename ScalarT, size_t Size, typename BaseT = col_base>
+	template <typename E>
+	class matrix_expression;
+
+	template <typename T, size_t Size, typename B = col_base>
 	class vector;
 
-	template <typename ExprT>
-	class vector_reference;
-
-	template <typename ExprT, typename IndexorT>
+	template <typename E, typename I>
 	class vector_proxy;
 } }

@@ -77,6 +77,7 @@ namespace leaves { namespace math
 		typedef std::enable_if_t<value, T1> type;
 	};
 
+	// is scalar
 	template <typename T>
 	struct is_scalar
 	{
@@ -87,6 +88,50 @@ namespace leaves { namespace math
 		static const bool is_reference = std::is_reference<T>::value;
 	public:
 		static const bool value = is_signed && is_arithmetic && !is_const && !is_reference;
+	};
+
+	// is scalar expression
+	template <typename E>
+	struct is_scalar_expression : std::is_base_of<scalar_expression<E>, E>
+	{
+	};
+
+	// is vector
+	template <typename T>
+	struct is_vector : std::false_type
+	{
+	};
+
+	template <typename T, size_type N, typename B>
+	struct is_vector<vector<T, N, B> > : std::true_type
+	{
+	};
+
+	// is vector expression
+	namespace detail
+	{
+		template <typename E>
+		struct is_vector_expression_impl : std::is_base_of<vector_expression<E>, E>
+		{
+		};
+	}
+
+	template <typename E>
+	struct is_vector_expression : detail::is_vector_expression_impl<
+		std::remove_const_t<std::remove_const_t<E> > >
+	{
+	};
+
+	// is matrix
+	template <typename T>
+	struct is_matrix : std::false_type
+	{
+	};
+
+	// is matrix expression
+	template <typename E>
+	struct is_matrix_expression : std::is_base_of<matrix_expression<E>, E>
+	{
 	};
 
 	template <size_t Index>

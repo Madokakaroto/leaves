@@ -8,6 +8,7 @@ namespace leaves { namespace math
 	public:
 		typedef E expression_type;
 		typedef std::add_const_t<E> const_expression_type;
+		typedef vector_tag type_tag;
 
 		// PL is short for palce hodler
 		template <typename ... PLs>
@@ -218,48 +219,39 @@ namespace leaves { namespace math
 		scalar_type			v_;
 	};
 
-	//template 
-	//<
-	//	typename T, typename E,
-	//	template <typename, typename> class ScalarBinary
-	//>
-	//class scalar_vector :
-	//	public vector_expression<scalar_vector<T, E, ScalarBinary> >
-	//{
-	//	typedef scalar_vector<T, E, ScalarBinary> this_type;
-	//public:
-	//	static_assert(is_scalar<T>::value, "Cannot be types except scalar!");
-	//	typedef T scalar_type;
-	//	typedef E expression_type;
-	//	typedef typename expression_type::value_type right_value_type;
-	//	typedef ScalarBinary<scalar_type, right_value_type> function_type;
-	//	typedef typename function_type::return_type value_type;
-	//	static size_type const size = expression_type::size;
-	//	typedef typename function_type::base_tag base_tag;
-	//
-	//public:
-	//
-	//	scalar_vector(scalar_type v, expression_type& e)
-	//		: v_(v)
-	//		, e_(e)
-	//	{
-	//	}
-	//
-	//	value_type operator() (size_type index) const
-	//	{
-	//		return function_type::apply(e_(index), v_);
-	//	}
-	//
-	//	template <size_type I>
-	//	value_type get() const
-	//	{
-	//		return function_type::apply(e_.get<I>(), v_);
-	//	}
-	//
-	//	using vector_expression<this_type>::operator();
-	//
-	//private:
-	//	scalar_type			v_;
-	//	expression_type&	e_;
-	//};
+	template
+	<
+		typename E,
+		template <typename, typename> class ScalarBinary
+	>
+	class vector_to_scalar :
+		public scalar_expression<vector_to_scalar<E, ScalarBinary> >
+	{
+		typedef vector_to_scalar<E, ScalarBinary> this_type;
+	public:
+		static_assert(is_vector_expression<E>::value, "Must be a vector expression type!");
+		typedef E expression_type;
+		typedef typename expression_type::value_type value_type;
+		typedef value_type reference;
+		static size_type const size = 1;
+	public:
+
+		explicit vector_to_scalar(expression_type& e)
+			: e_(e)
+		{
+		}
+
+		operator value_type() const
+		{
+			return evaluate<ScalarBinary>(e_);
+		}
+
+		value_type operator() (void) const
+		{
+			return evaluate<ScalarBinary>(e_);
+		}
+
+	private:
+		expression_type& e_;
+	};
 } }

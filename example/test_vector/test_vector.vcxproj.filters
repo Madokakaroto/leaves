@@ -3,4 +3,83 @@
   <ItemGroup>
     <ClCompile Include="test_vector.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Filter Include="leaves">
+      <UniqueIdentifier>{c1edf3b4-b5c9-4a84-a34e-e89aa1a9c9b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math">
+      <UniqueIdentifier>{dda279f3-1067-48c3-b3dd-81e43c33f67c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\interop">
+      <UniqueIdentifier>{091fdf11-f00d-4778-868b-f3e90bce49fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\vector">
+      <UniqueIdentifier>{d35e570c-f2a3-41d9-88c1-03d40fe1f9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\scalar">
+      <UniqueIdentifier>{59ebca18-e9f4-46d8-93e7-7ea52fca12b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\vector\detail">
+      <UniqueIdentifier>{9affa672-981e-4ab5-abce-9dbeead844ef}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\leaves\math.hpp">
+      <Filter>leaves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\null_type.hpp">
+      <Filter>leaves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\type_list.hpp">
+      <Filter>leaves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\forward.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\scalar.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\template_expression.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\traits.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\scalar\expresion.hpp">
+      <Filter>leaves\math\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\scalar\functor.hpp">
+      <Filter>leaves\math\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\scalar\traits.hpp">
+      <Filter>leaves\math\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\evaluate.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\expression.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\functional.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\place_holder.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\traits.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\vector.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\detail\evaluate_detail.hpp">
+      <Filter>leaves\math\vector\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\detail\functional_detail.hpp">
+      <Filter>leaves\math\vector\detail</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

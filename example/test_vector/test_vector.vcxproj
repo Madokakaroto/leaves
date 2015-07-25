@@ -81,6 +81,27 @@
   <ItemGroup>
     <ClCompile Include="test_vector.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\leaves\math.hpp" />
+    <ClInclude Include="..\..\leaves\math\forward.hpp" />
+    <ClInclude Include="..\..\leaves\math\scalar.hpp" />
+    <ClInclude Include="..\..\leaves\math\scalar\expresion.hpp" />
+    <ClInclude Include="..\..\leaves\math\scalar\functor.hpp" />
+    <ClInclude Include="..\..\leaves\math\scalar\traits.hpp" />
+    <ClInclude Include="..\..\leaves\math\template_expression.hpp" />
+    <ClInclude Include="..\..\leaves\math\traits.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\detail\evaluate_detail.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\detail\functional_detail.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\evaluate.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\expression.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\functional.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\place_holder.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\traits.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\vector.hpp" />
+    <ClInclude Include="..\..\leaves\null_type.hpp" />
+    <ClInclude Include="..\..\leaves\type_list.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
