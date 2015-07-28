@@ -186,12 +186,12 @@ namespace leaves { namespace math
 		struct max_impl
 		{
 			typedef T type;
-			static type const recursive_max = max_impl<T, Xs>::value;
+			static type const recursive_max = max_impl<T, Xs...>::value;
 			static type const value = X0 > recursive_max ? X0 : recursive_max;
 		};
 
 		template <typename T, T X0>
-		struct max<T, X0>
+		struct max_impl<T, X0>
 		{
 			typedef T type;
 			static type const value = X0;

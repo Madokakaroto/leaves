@@ -54,7 +54,7 @@ namespace leaves { namespace math
 
 	// unary functor
 	LEAVES_MATH_SCALAR_UNARY_FUNCTOR(positive, leaves_numeric_positive);
-	LEAVES_MATH_SCALAR_UNARY_FUNCTOR(squre, leaves_numeric_square);
+	LEAVES_MATH_SCALAR_UNARY_FUNCTOR(square, leaves_numeric_square);
 	LEAVES_MATH_SCALAR_UNARY_FUNCTOR(abs, leaves_numeric_abs);
 	LEAVES_MATH_SCALAR_UNARY_FUNCTOR(inverse, leaves_numeric_inverse);
 

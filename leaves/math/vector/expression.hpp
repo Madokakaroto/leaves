@@ -47,10 +47,11 @@ namespace leaves { namespace math
 			typename expression_type::reference> reference;
 		typedef typename expression_type::base_tag base_tag;
 		typedef I indexor_type;
-		static const size_type size = indexor_type::size;
+		static size_type const size = indexor_type::size;
+		static size_type const complexity = expression_type::complexity;
 
-		explicit vector_proxy(expression_type& v)
-			: e_(v)
+		explicit vector_proxy(expression_type& e)
+			: e_(e)
 		{
 		}
 
@@ -71,7 +72,6 @@ namespace leaves { namespace math
 		using vector_expression<this_type>::operator();
 
 	private:
-
 		expression_type& e_;
 	};
 
@@ -81,19 +81,15 @@ namespace leaves { namespace math
 		public vector_expression<vector_unary<E, F> >
 	{
 		typedef vector_unary<E, F> this_type;
-	public:
-		typedef E expression_type;										
+	public:			
+		typedef E expression_type;
 		typedef F function_type;	
-
-		typedef typename function_type::return_type value_type;			
+		typedef typename function_type::value_type value_type;			
 		typedef value_type reference;									
-		typedef typename expression_type::base_tag base_tag;
-		static size_type const size = expression_type::size;			
-		static size_type const complexity = 
-			expression_type::complexity * function_type::complexity;	
-	
+		typedef typename function_type::base_tag base_tag;
+		static size_type const size = function_type::size;
+		static size_type const complexity = function_type::complexity;	
 	public:
-	
 		explicit vector_unary(expression_type& e)
 			: e_(e)
 		{
@@ -101,19 +97,18 @@ namespace leaves { namespace math
 	
 		value_type operator() (size_type index) const
 		{
-			return function_type::apply(e_(index));
+			return function_type::apply(e_, index);
 		}
 	
 		template <size_type Index>
 		value_type get() const
 		{
-			return function_type::apply(e_.get<Index>());
+			return function_type::apply<Index>(e_);
 		}
 	
 		using vector_expression<this_type>::operator();
 	
 	private:
-	
 		expression_type& e_;
 	};
 
@@ -123,91 +118,74 @@ namespace leaves { namespace math
 	{
 		typedef vector_binary<E1, E2, F> this_type;
 	public:
-		typedef E1 left_expression_type;
-		typedef E2 right_expression_type;
+		typedef E1 expression_type1;
+		typedef E2 expression_type2;
 		typedef F function_type;
-
-		static size_type const left_size = left_expression_type::size;
-		static size_type const right_size = right_expression_type::size;
-		static_assert(equal<size_type, left_size, right_size>::value, "Must have the same size!");
-		typedef typename left_expression_type::base_tag left_base_tag;
-		typedef typename right_expression_type::base_tag right_base_tag;
-		static_assert(std::is_same<left_base_tag, right_base_tag>::value, "Must have the same tag");
-
-		typedef typename function_type::return_type value_type;
+		typedef typename function_type::value_type value_type;
 		typedef value_type reference;
-		typedef left_base_tag base_tag;
-		static size_type const size = left_size;
-		static size_type const complexity = function_type::complexity *
-			max<size_type, left_expression_type::complexity, right_expression_type::complexity>::value;
-	
+		typedef typename function_type::base_tag base_tag;
+		static size_type const size = function_type::size;
+		static size_type const complexity = function_type::complexity;
 	public:
-		
-		vector_binary(left_expression_type& l, right_expression_type& r)
-			: l_(l)
-			, r_(r)
+		vector_binary(expression_type1& l, expression_type2& r)
+			: e1_(l)
+			, e2_(r)
 		{
 		}
 
-		value_type operator() (size_type index) const
+		value_type operator() (size_type i) const
 		{
-			return function_type::apply(l_(index), r_(index));
+			return function_type::apply(e1_, e2_, i);
 		}
 
 		template <size_type I>
 		value_type get() const
 		{
-			return function_type::apply(l_.get<I>(), r_.get<I>());
+			return function_type::apply<I>(e1_, e2_);
 		}
 
 		using vector_expression<this_type>::operator();
 
 	private:
-
-		left_expression_type&	l_;
-		right_expression_type&	r_;
+		expression_type1&	e1_;
+		expression_type2&	e2_;
 	};
 
 	template <typename E, typename T, typename F>
 	class vector_scalar :
-		public vector_expression<vector_scalar<E, T, F> >
+		public vector_expression<vector_scalar<E, T, F>>
 	{
 		typedef vector_scalar<E, T, F> this_type;
 	public:
 		typedef E expression_type;
 		typedef T scalar_type;
 		typedef F function_type;
-
 		typedef typename function_type::return_type value_type;
-		typedef value_type reference;
-		typedef typename expression_type::base_tag base_tag;
-		static size_type const size = expression_type::size;
-		static size_type const complexity =
-			function_type::complexity *  expression_type::complexity;
-
+		typedef typename function_type::reference reference;
+		typedef typename function_type::base_tag base_tag;
+		static size_type const size = function_type::size;
+		static size_type const complexity = function_type::complexity;
 	public:
-
 		vector_scalar(expression_type& e, scalar_type v)
 			: e_(e)
 			, v_(v)
 		{
 		}
 
-		value_type operator() (size_type index) const
+		value_type operator() (size_type i) const
 		{
-			return function_type::apply(e_(index), v_);
+			return function_type::apply(e_, v_, i)
 		}
 
 		template <size_type I>
 		value_type get() const
 		{
-			return function_type::apply(e_.get<I>(), v_);
+			return function_type::apply<I>(e_, v_);
 		}
 
 		using vector_expression<this_type>::operator();
 
 	private:
-
 		expression_type&	e_;
 		scalar_type			v_;
 	};

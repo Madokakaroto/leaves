@@ -16,12 +16,13 @@ namespace leaves { namespace math
 	{
 		typedef vector<T, Size, B> this_type;
 	public:
-		static_assert(is_scalar<T>::value, "");
+		static_assert(is_scalar<T>::value, "Element must be a scalar type!");
 		typedef T value_type;
 		typedef value_type& reference;
 		typedef value_type array_type[Size];
 		typedef B base_tag;
-		static const size_type size = Size;
+		static size_type const size = Size;
+		static size_type const complexity = 1;
 	public:
 
 		/*
@@ -34,7 +35,7 @@ namespace leaves { namespace math
 		 */
 		explicit vector(value_type v)
 		{
-			assign<scalar_assign>(*this, v);
+			assign<vector_assign_scalar>(*this, v);
 		}
 	
 		/*
@@ -44,7 +45,7 @@ namespace leaves { namespace math
 			typename = std::enable_if_t<equal<size_type, argument_count<Arg0, Args...>::value, size>::value> >
 		vector(Arg0 arg0, Args ... args)
 		{
-			assign<scalar_assign>(*this, arg0, args...);
+			assign<vector_assign_scalar_variadic>(*this, arg0, args...);
 		}
 	
 		/*
@@ -59,10 +60,10 @@ namespace leaves { namespace math
 		/*
 		 * evaluate when construct from another vector expression
 		 */
-		template <typename E_>
-		vector(vector_expression<E_> const& ve)
+		template <typename E1>
+		vector(vector_expression<E1> const& ve)
 		{
-			assign<scalar_assign>(*this, ve);
+			assign<vector_assign_vector>(*this, ve);
 		}
 	
 		/*
@@ -78,50 +79,50 @@ namespace leaves { namespace math
 		/*
 		 * evalutate when assign with another expression
 		 */
-		template <typename E_>
-		this_type& operator= (vector_expression<E_> const& e)
+		template <typename E1>
+		this_type& operator= (vector_expression<E1> const& e)
 		{
-			assign<scalar_assign>(*this, get_expression(e));
+			assign<vector_assign_vector>(*this, get_expression(e));
 			return *this;
 		}
 	
 		/*
 		 * add assign 
 		 */
-		template <typename E_>
-		this_type& operator += (vector_expression<E_> const& e)
+		template <typename E1>
+		this_type& operator += (vector_expression<E1> const& e)
 		{
-			assign<scalar_add_assign>(*this, get_expression(e));
+			assign<vector_add_assign_vector>(*this, get_expression(e));
 			return *this;
 		}
 	
 		/*
 		 * sub assign
 		 */
-		template <typename E_>
-		this_type& operator -= (vector_expression<E_> const& e)
+		template <typename E1>
+		this_type& operator -= (vector_expression<E1> const& e)
 		{
-			assign<scalar_sub_assign>(*this, get_expression(e));
+			assign<vector_sub_assign_vector>(*this, get_expression(e));
 			return *this;
 		}
 	
 		/*
 		 * multiply assign
 		 */
-		template <typename E_>
-		this_type& operator *= (vector_expression<E_> const& e)
+		template <typename E1>
+		this_type& operator *= (vector_expression<E1> const& e)
 		{
-			assign<scalar_mult_assign>(*this, get_expression(e));
+			assign<vector_mult_assign_vector>(*this, get_expression(e));
 			return *this;
 		}
 	
 		/*
 		 * divide assign
 		 */
-		template <typename E_>
-		this_type& operator /= (vector_expression<E_> const& e)
+		template <typename E1>
+		this_type& operator /= (vector_expression<E1> const& e)
 		{
-			assign<scalar_div_assign>(*this, get_expression(e));
+			assign<vector_div_assign_vector>(*this, get_expression(e));
 			return *this;
 		}
 
@@ -130,6 +131,7 @@ namespace leaves { namespace math
 		 */
 		this_type& operator *= (value_type v)
 		{
+			assign<vector_mult_assign_scalar>(*this, v);
 			return *this;
 		}
 
@@ -138,6 +140,7 @@ namespace leaves { namespace math
 		 */
 		this_type& operator /= (value_type v)
 		{
+			assign<vector_div_assign_scalar>(*this, v);
 			return *this;
 		}
 
