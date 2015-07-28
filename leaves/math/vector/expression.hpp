@@ -76,22 +76,21 @@ namespace leaves { namespace math
 	};
 
 	// policy based design
-	template
-	< 
-		typename E, 
-		template <typename> class ScalarUnary
-	>
+	template <typename E, typename F>
 	class vector_unary : 
-		public vector_expression<vector_unary<E, ScalarUnary> >
+		public vector_expression<vector_unary<E, F> >
 	{
-		typedef vector_unary<E, ScalarUnary> this_type;
+		typedef vector_unary<E, F> this_type;
 	public:
-		typedef E expression_type;
-		typedef typename expression_type::value_type value_type;
-		typedef typename value_type reference;
+		typedef E expression_type;										
+		typedef F function_type;	
+
+		typedef typename function_type::return_type value_type;			
+		typedef value_type reference;									
 		typedef typename expression_type::base_tag base_tag;
-		typedef ScalarUnary<value_type> function_type;
-		static const size_type size = expression_type::size;
+		static size_type const size = expression_type::size;			
+		static size_type const complexity = 
+			expression_type::complexity * function_type::complexity;	
 	
 	public:
 	
@@ -118,20 +117,16 @@ namespace leaves { namespace math
 		expression_type& e_;
 	};
 
-	template
-	<
-		typename E1, typename E2,
-		template <typename, typename> class ScalarBinary
-	>
+	template <typename E1, typename E2, typename F>
 	class vector_binary : 
-		public vector_expression<vector_binary<E1, E2, ScalarBinary> >
+		public vector_expression<vector_binary<E1, E2, F>>
 	{
-		typedef vector_binary<E1, E2, ScalarBinary> this_type;
+		typedef vector_binary<E1, E2, F> this_type;
 	public:
 		typedef E1 left_expression_type;
 		typedef E2 right_expression_type;
-		typedef typename left_expression_type::value_type left_value_type;
-		typedef typename right_expression_type::value_type right_value_type;
+		typedef F function_type;
+
 		static size_type const left_size = left_expression_type::size;
 		static size_type const right_size = right_expression_type::size;
 		static_assert(equal<size_type, left_size, right_size>::value, "Must have the same size!");
@@ -139,11 +134,12 @@ namespace leaves { namespace math
 		typedef typename right_expression_type::base_tag right_base_tag;
 		static_assert(std::is_same<left_base_tag, right_base_tag>::value, "Must have the same tag");
 
-		typedef ScalarBinary<left_value_type, right_value_type> function_type;
 		typedef typename function_type::return_type value_type;
 		typedef value_type reference;
-		static size_type const size = left_size;
 		typedef left_base_tag base_tag;
+		static size_type const size = left_size;
+		static size_type const complexity = function_type::complexity *
+			max<size_type, left_expression_type::complexity, right_expression_type::complexity>::value;
 	
 	public:
 		
@@ -172,25 +168,22 @@ namespace leaves { namespace math
 		right_expression_type&	r_;
 	};
 
-	template 
-	<
-		typename E, typename T,
-		template <typename, typename> class ScalarBinary
-	>
+	template <typename E, typename T, typename F>
 	class vector_scalar :
-		public vector_expression<vector_scalar<E, T, ScalarBinary> >
+		public vector_expression<vector_scalar<E, T, F> >
 	{
-		typedef vector_scalar<E, T, ScalarBinary> this_type;
+		typedef vector_scalar<E, T, F> this_type;
 	public:
 		typedef E expression_type;
-		typedef typename expression_type::value_type left_value_type;
-		static_assert(is_scalar<T>::value, "Cannot be types except scalar!");
 		typedef T scalar_type;
-		typedef ScalarBinary<left_value_type, scalar_type> function_type;
+		typedef F function_type;
+
 		typedef typename function_type::return_type value_type;
 		typedef value_type reference;
+		typedef typename expression_type::base_tag base_tag;
 		static size_type const size = expression_type::size;
-		typedef typename expression_type::base_tag base_type;
+		static size_type const complexity =
+			function_type::complexity *  expression_type::complexity;
 
 	public:
 
@@ -219,21 +212,16 @@ namespace leaves { namespace math
 		scalar_type			v_;
 	};
 
-	template
-	<
-		typename E,
-		template <typename, typename> class ScalarBinary
-	>
+	template<typename E, typename F>
 	class vector_to_scalar :
-		public scalar_expression<vector_to_scalar<E, ScalarBinary> >
+		public scalar_expression<vector_to_scalar<E, F>>
 	{
-		typedef vector_to_scalar<E, ScalarBinary> this_type;
+		typedef vector_to_scalar<E, F> this_type;
 	public:
-		static_assert(is_vector_expression<E>::value, "Must be a vector expression type!");
 		typedef E expression_type;
-		typedef typename expression_type::value_type value_type;
+		typedef F function_type;
+		typedef typename function_type::return_type value_type;
 		typedef value_type reference;
-		static size_type const size = 1;
 	public:
 
 		explicit vector_to_scalar(expression_type& e)
@@ -243,12 +231,12 @@ namespace leaves { namespace math
 
 		operator value_type() const
 		{
-			return evaluate<ScalarBinary>(e_);
+			return 0;
 		}
 
 		value_type operator() (void) const
 		{
-			return evaluate<ScalarBinary>(e_);
+			return 0;
 		}
 
 	private:

@@ -40,8 +40,10 @@ namespace
 
 namespace leaves { namespace math 
 {
+	// size type 
 	typedef std::size_t size_type;
 
+	// type promotion
 	template <typename T, typename P>
 	struct promotion_traits
 	{
@@ -54,6 +56,7 @@ namespace leaves { namespace math
 	template <typename T>
 	struct type_traits;
 
+	// is all types the same type
 	template <typename ... Args>
 	struct is_same;
 
@@ -134,6 +137,7 @@ namespace leaves { namespace math
 	{
 	};
 
+	// arguments get helper
 	template <size_t Index>
 	struct argument
 	{
@@ -155,21 +159,74 @@ namespace leaves { namespace math
 		}
 	};
 
+	// arguments count
 	template <typename ... Args>
 	struct argument_count
 	{
 		static size_type const value = sizeof...(Args);
 	};
 
+	// bigger than
 	template <typename T, T M, T N>
 	struct bigger_than
 	{
 		static bool const value = M > N;
 	};
 
+	// equal to
 	template <typename T, T M, T N>
 	struct equal
 	{
 		static bool const value = M == N;
 	};
+
+	namespace detail
+	{
+		template <typename T, T X0, T... Xs>
+		struct max_impl
+		{
+			typedef T type;
+			static type const recursive_max = max_impl<T, Xs>::value;
+			static type const value = X0 > recursive_max ? X0 : recursive_max;
+		};
+
+		template <typename T, T X0>
+		struct max<T, X0>
+		{
+			typedef T type;
+			static type const value = X0;
+		};
+	}
+
+	template <typename T, T ... Xs>
+	struct max : detail::max_impl<T, Xs...>
+	{
+	};
 } }
+
+// expression traits
+//namespace leaves { namespace math
+//{
+//	template <typename E>
+//	struct expression_tratis_impl;
+//
+//	template <typename E>
+//	struct expression_traits : expression_tratis_impl<std::remove_reference_t<E>>
+//	{
+//	};
+//
+//	template <typename E>
+//	struct expression_tratis_impl<template_expression<E>>
+//	{	
+//	};
+//
+//	template <typename E>
+//	struct expression_tratis_impl<vector_expression<E>>
+//	{
+//	};
+//
+//	template <typename E, typename F>
+//	struct expression_tratis_impl<vector_unary<E, F>>
+//	{
+//	};
+//} }

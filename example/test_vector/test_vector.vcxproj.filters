@@ -63,9 +63,6 @@
     <ClInclude Include="..\..\leaves\math\vector\expression.hpp">
       <Filter>leaves\math\vector</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\leaves\math\vector\functional.hpp">
-      <Filter>leaves\math\vector</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\leaves\math\vector\place_holder.hpp">
       <Filter>leaves\math\vector</Filter>
     </ClInclude>
@@ -80,6 +77,12 @@
     </ClInclude>
     <ClInclude Include="..\..\leaves\math\vector\detail\functional_detail.hpp">
       <Filter>leaves\math\vector\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\operator.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\vector\functor.hpp">
+      <Filter>leaves\math\vector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

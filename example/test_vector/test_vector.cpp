@@ -3,7 +3,7 @@
 void main()
 {
 	using float4 = leaves::math::vector<float, 4>;
-	using float3 = leaves::math::vector < float, 3 > ;
+	using float3 = leaves::math::vector<float, 3>;
 
 	// aggregate initialization
 	{
@@ -104,7 +104,6 @@ void main()
 	{
 		float4 v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
 		float4 v2 = { 2.0f, 2.0f, 2.0f, 2.0f };
-		auto dot_prod = leaves::math::dot(v1, v2);
-		//std::cout << dot_prod << std::endl;
+		auto dot_prod = dot(v1, v2);				// ADL 
 	}
 }

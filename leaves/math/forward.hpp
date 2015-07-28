@@ -37,4 +37,7 @@ namespace leaves { namespace math
 
 	template <typename E, typename I>
 	class vector_proxy;
+
+	template <typename E, typename F>
+	class vector_unary;
 } }

@@ -95,7 +95,8 @@
     <ClInclude Include="..\..\leaves\math\vector\detail\functional_detail.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\evaluate.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\expression.hpp" />
-    <ClInclude Include="..\..\leaves\math\vector\functional.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\functor.hpp" />
+    <ClInclude Include="..\..\leaves\math\vector\operator.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\place_holder.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\traits.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\vector.hpp" />

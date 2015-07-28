@@ -2,9 +2,10 @@
 
 #include "traits.hpp"
 #include "place_holder.hpp"
+#include "functor.hpp"
 #include "evaluate.hpp"
 #include "expression.hpp"
-#include "functional.hpp"
+#include "operator.hpp"
 
 namespace leaves { namespace math
 {
