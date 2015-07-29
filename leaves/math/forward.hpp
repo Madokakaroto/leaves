@@ -46,4 +46,7 @@ namespace leaves { namespace math
 
 	template <typename E, typename T, typename F>
 	class vector_scalar;
+
+	template <typename E, typename F>
+	class vector_to_scalar;
 } }

@@ -37,15 +37,15 @@ namespace leaves { namespace math
 		function_type::apply(get_expression(e), args...);
 	}
 
-	template
-	<
-		template <typename> class FP,
-		typename E
-	>
-	auto reduce(vector_expression<E> const& e) -> typename FP<E>::return_type
-	{
-		typedef FP<E> function_type;
-		function_type::apply(get_expression(e));
-	}
+	//template
+	//<
+	//	template <typename> class FP,
+	//	typename E
+	//>
+	//auto reduce(vector_expression<E> const& e) -> typename FP<E>::return_type
+	//{
+	//	typedef FP<E> function_type;
+	//	function_type::apply(get_expression(e));
+	//}
 
 } }

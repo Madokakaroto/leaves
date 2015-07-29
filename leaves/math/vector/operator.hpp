@@ -116,6 +116,16 @@ namespace leaves { namespace math
 		return expression_type{ get_expression(e), t };
 	}
 	
+	template <typename E>
+	auto magnitude(vector_expression<E> const& e)
+		-> typename vector_to_scalar_traits<E, vector_sum>::result_type
+	{
+		typedef typename vector_to_scalar_traits<E, vector_sum>::type expression_type;
+		return expression_type{ get_expression(e) };
+	}
+
+	// return type is value type
+	// return object is a type of scalar expression
 	//// dot product leads to evaluation
 	//template <typename E1, typename E2>
 	//auto dot(vector_expression<E1> const& e1, vector_expression<E2> const& e2)

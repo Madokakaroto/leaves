@@ -11,7 +11,6 @@ void main()
 		float3 v2 = { 3.0f, 2.0f, 1.0f };
 	}
 	
-	
 	// uniform initialization
 	{
 		float4 v1 = float4{ 1.0f };

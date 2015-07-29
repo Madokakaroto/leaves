@@ -22,7 +22,7 @@ namespace leaves { namespace math
 		typedef value_type array_type[Size];
 		typedef B base_tag;
 		static size_type const size = Size;
-		static size_type const complexity = 1;
+		static size_type const complexity = 0u;		// no computation
 	public:
 
 		/*

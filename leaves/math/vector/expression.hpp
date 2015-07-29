@@ -198,10 +198,10 @@ namespace leaves { namespace math
 	public:
 		typedef E expression_type;
 		typedef F function_type;
-		typedef typename function_type::return_type value_type;
+		typedef typename function_type::value_type value_type;
 		typedef value_type reference;
+		static size_type const complexity = function_type::complexity;
 	public:
-
 		explicit vector_to_scalar(expression_type& e)
 			: e_(e)
 		{
@@ -209,15 +209,37 @@ namespace leaves { namespace math
 
 		operator value_type() const
 		{
-			return 0;
+			function_type::apply(e_);
 		}
-
-		value_type operator() (void) const
-		{
-			return 0;
-		}
-
 	private:
 		expression_type& e_;
+	};
+
+	template <typename E1, typename E2, typename F>
+	class vector_binary_to_scalar :
+		public scalar_expression<vector_binary_to_scalar<E1, E2, F>>
+	{
+		typedef vector_binary_to_scalar<E1, E2, F> this_type;
+	public:
+		typedef E1 expression_type1;
+		typedef E2 expression_type2;
+		typedef F function_type;
+		typedef typename function_type::value_type value_type;
+		typedef value_type reference;
+		static size_type const complexity = function_type::complexity;
+	public:
+		vector_binary_to_scalar(expression_type1& e1, expression_type2& e2)
+			: e1_(e1)
+			, e2_(e2)
+		{
+		}
+
+		operator value_type() const
+		{
+			return function_type::apply(e1_, e2_);
+		}
+	private:
+		expression_type1& e1_;
+		expression_type2& e2_;
 	};
 } }

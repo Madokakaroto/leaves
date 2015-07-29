@@ -50,19 +50,15 @@ namespace leaves { namespace math
 	};
 
 	template <typename E1, typename E2>
-	using vector_assign_vector = vector_assign_vector_base<E1, E2, scalar_assign>;
-
+	struct vector_assign_vector : vector_assign_vector_base<E1, E2, scalar_assign> {};
 	template <typename E1, typename E2>
-	using vector_add_assign_vector = vector_assign_vector_base<E1, E2, scalar_add_assign>;
-
+	struct vector_add_assign_vector : vector_assign_vector_base<E1, E2, scalar_add_assign> {};
 	template <typename E1, typename E2>
-	using vector_sub_assign_vector = vector_assign_vector_base<E1, E2, scalar_sub_assign>;
-
+	struct vector_sub_assign_vector : vector_assign_vector_base<E1, E2, scalar_sub_assign> {};
 	template <typename E1, typename E2>
-	using vector_mult_assign_vector = vector_assign_vector_base<E1, E2, scalar_mult_assign>;
-
+	struct vector_mult_assign_vector : vector_assign_vector_base<E1, E2, scalar_mult_assign> {};
 	template <typename E1, typename E2>
-	using vector_div_assign_vector = vector_assign_vector_base<E1, E2, scalar_div_assign>;
+	struct vector_div_assign_vector : vector_assign_vector_base<E1, E2, scalar_div_assign> {};
 
 	template
 	<
@@ -105,13 +101,11 @@ namespace leaves { namespace math
 	};
 
 	template <typename E, typename T>
-	using vector_assign_scalar = vector_assign_scalar_base<E, T, scalar_assign>;
-
+	struct vector_assign_scalar : vector_assign_scalar_base<E, T, scalar_assign> {};
 	template <typename E, typename T>
-	using vector_mult_assign_scalar = vector_assign_scalar_base<E, T, scalar_mult_assign>;
-
+	struct vector_mult_assign_scalar : vector_assign_scalar_base<E, T, scalar_mult_assign> {};
 	template <typename E, typename T>
-	using vector_div_assign_scalar = vector_assign_scalar_base<E, T, scalar_div_assign>;
+	struct vector_div_assign_scalar : vector_assign_scalar_base<E, T, scalar_div_assign> {};
 
 	template <typename E, typename ... Args>
 	struct vector_assign_scalar_variadic
@@ -199,17 +193,6 @@ namespace leaves { namespace math
 		}
 	};
 
-	// something wrong with template alias
-	//template <typename E>
-	//using vector_unary_positive = vector_unary_functor_base<E, scalar_positive>;
-	//template <typename E>
-	//using vector_unary_negative = vector_unary_functor_base<E, scalar_negative>;
-	//template <typename E>
-	//using vector_unary_abs = vector_unary_functor_base<E, scalar_abs>;
-	//template <typename E>
-	//using vector_unary_square = vector_unary_functor_base<E, scalar_square>;
-	//template <typename E>
-	//using vector_unary_inverse = vector_unary_functor_base<E, scalar_inverse>;
 	template <typename E>
 	struct vector_unary_positive : vector_unary_functor_base<E, scalar_positive> {};
 	template <typename E>
@@ -279,14 +262,6 @@ namespace leaves { namespace math
 		}
 	};
 
-	//template <typename E1, typename E2>
-	//using vector_binary_add = vector_binary_functor_base<E1, E2, scalar_add>;
-	//template <typename E1, typename E2>
-	//using vector_binary_sub = vector_binary_functor_base<E1, E2, scalar_sub>;
-	//template <typename E1, typename E2>
-	//using vector_binary_mult = vector_binary_functor_base<E1, E2, scalar_mult>;
-	//template <typename E1, typename E2>
-	//using vector_binary_div = vector_binary_functor_base<E1, E2, scalar_div>;
 	template <typename E1, typename E2>
 	struct vector_binary_add : vector_binary_functor_base<E1, E2, scalar_add> {};
 	template <typename E1, typename E2>
@@ -343,13 +318,64 @@ namespace leaves { namespace math
 		}
 	};
 
-	//template <typename E, typename T>
-	//using vector_scalar_mult = vector_scalar_functor_base<E, T, scalar_mult>;
-	//template <typename E, typename T>
-	//using vector_scalar_div = vector_scalar_functor_base<E, T, scalar_div>;
 	template <typename E, typename T>
 	struct vector_scalar_mult : vector_scalar_functor_base<E, T, scalar_mult> {};
 	template <typename E, typename T>
 	struct vector_scalar_div : vector_scalar_functor_base<E, T, scalar_div> {};
 
+	template 
+	<
+		typename E,
+		template <typename, typename> class BP
+	>
+	struct vector_unary_to_scalar_functor_base
+	{
+		static_assert(is_vector_expression<E>::value, "Must be a vector expression!");
+		typedef E expression_type;
+		typedef typename expression_type::value_type evalue_type;
+		static_assert(expression_type::complexity <= 1, "Too complex to calculate!");
+		typedef BP<evalue_type, evalue_type> function_type;
+		typedef typename function_type::return_type value_type;
+
+		template <size_type C>
+		struct complexity
+		{
+			static size_type const value = C; // 1 * C
+		};
+
+		template <>
+		struct complexity<0u>
+		{
+			static size_type const value = 1u;
+		};
+
+		template <size_type B, size_type E>
+		struct unroll
+		{
+			static value_type apply(expression_type& e)
+			{
+				return function_type::apply(e.get<B>(), unroll<B + 1, E>::apply(e));
+			}
+		};
+
+		template <size_type E>
+		struct unroll<E, E>
+		{
+			static value_type apply(expression_type& e)
+			{
+				return e.get<E>();
+			}
+		};
+
+		static size_type const complexity = complexity<expression_type::complexity>::value;
+		static size_type const size = expression_type::size;
+
+		static value_type apply(expression_type& e)
+		{
+			return unroll<0, size - 1>::apply(e);
+		}
+	};
+
+	template <typename E>
+	struct vector_sum : vector_unary_to_scalar_functor_base<E, scalar_add> {};
 } }
