@@ -78,24 +78,24 @@ namespace leaves { namespace math
 	}
 
 	// operator *
-	//template <typename E, typename T,
-	//	typename = std::enable_if_t<is_scalar<T>::value> >
-	//auto operator * (vector_expression<E> const& e, T t)
-	//	-> typename vector_scalar_traits<E, T, scalar_mult>::result
-	//{
-	//	typedef typename vector_scalar_traits<E, T, scalar_mult>::result expression_type;
-	//	return expression_type{ get_expression(e), t };
-	//}
-	//
-	//// operator *
-	//template <typename T, typename E,
-	//	typename = std::enable_if_t<is_scalar<T>::value > >
-	//auto operator * (T t, vector_expression<E> const& e)
-	//	-> typename vector_scalar_traits<E, T, scalar_div>::result
-	//{
-	//	typedef typename vector_scalar_traits<E, T, scalar_div>::result expression_type;
-	//	return expression_type{ get_expression(e), t };
-	//}
+	template <typename E, typename T,
+		typename = std::enable_if_t<is_scalar<T>::value> >
+	auto operator * (vector_expression<E> const& e, T t)
+		-> typename vector_scalar_traits<E, T, vector_scalar_mult>::type
+	{
+		typedef typename vector_scalar_traits<E, T, vector_scalar_mult>::type expression_type;
+		return expression_type{ get_expression(e), t };
+	}
+	
+	// operator *
+	template <typename T, typename E,
+		typename = std::enable_if_t<is_scalar<T>::value > >
+	auto operator * (T t, vector_expression<E> const& e)
+		-> typename vector_scalar_traits<E, T, vector_scalar_div>::type
+	{
+		typedef typename vector_scalar_traits<E, T, vector_scalar_div>::type expression_type;
+		return expression_type{ get_expression(e), t };
+	}
 
 	// operator /
 	template <typename E1, typename E2>
@@ -107,15 +107,15 @@ namespace leaves { namespace math
 	}
 
 	// operator /
-	//template <typename E, typename T,
-	//	typename = std::enable_if_t<is_scalar<T>::value> >
-	//auto operator / (vector_expression<E> const& e, T t)
-	//	-> typename vector_scalar_traits<E, T, scalar_div>::result
-	//{
-	//	typedef typename vector_scalar_traits<E, T, scalar_div>::result expression_type;
-	//	return expression_type{ get_expression(e), t };
-	//}
-	//
+	template <typename E, typename T,
+		typename = std::enable_if_t<is_scalar<T>::value> >
+	auto operator / (vector_expression<E> const& e, T t)
+		-> typename vector_scalar_traits<E, T, vector_scalar_div>::type
+	{
+		typedef typename vector_scalar_traits<E, T, vector_scalar_div>::type expression_type;
+		return expression_type{ get_expression(e), t };
+	}
+	
 	//// dot product leads to evaluation
 	//template <typename E1, typename E2>
 	//auto dot(vector_expression<E1> const& e1, vector_expression<E2> const& e2)

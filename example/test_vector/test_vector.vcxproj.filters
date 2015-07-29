@@ -19,9 +19,6 @@
     <Filter Include="leaves\math\scalar">
       <UniqueIdentifier>{59ebca18-e9f4-46d8-93e7-7ea52fca12b5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="leaves\math\vector\detail">
-      <UniqueIdentifier>{9affa672-981e-4ab5-abce-9dbeead844ef}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\leaves\math.hpp">
@@ -77,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="..\..\leaves\math\vector\functor.hpp">
       <Filter>leaves\math\vector</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\leaves\math\vector\detail\operator_detail.hpp">
-      <Filter>leaves\math\vector\detail</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

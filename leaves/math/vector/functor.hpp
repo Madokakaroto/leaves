@@ -199,20 +199,27 @@ namespace leaves { namespace math
 		}
 	};
 
+	// something wrong with template alias
+	//template <typename E>
+	//using vector_unary_positive = vector_unary_functor_base<E, scalar_positive>;
+	//template <typename E>
+	//using vector_unary_negative = vector_unary_functor_base<E, scalar_negative>;
+	//template <typename E>
+	//using vector_unary_abs = vector_unary_functor_base<E, scalar_abs>;
+	//template <typename E>
+	//using vector_unary_square = vector_unary_functor_base<E, scalar_square>;
+	//template <typename E>
+	//using vector_unary_inverse = vector_unary_functor_base<E, scalar_inverse>;
 	template <typename E>
-	using vector_unary_positive = vector_unary_functor_base<E, scalar_positive>;
-
+	struct vector_unary_positive : vector_unary_functor_base<E, scalar_positive> {};
 	template <typename E>
-	using vector_unary_negative = vector_unary_functor_base<E, scalar_negative>;
-
+	struct vector_unary_negative : vector_unary_functor_base<E, scalar_negative> {};
 	template <typename E>
-	using vector_unary_abs = vector_unary_functor_base<E, scalar_abs>;
-
+	struct vector_unary_abs : vector_unary_functor_base<E, scalar_abs> {};
 	template <typename E>
-	using vector_unary_square = vector_unary_functor_base<E, scalar_square>;
-
+	struct vector_unary_square : vector_unary_functor_base<E, scalar_square> {};
 	template <typename E>
-	using vector_unary_inverse = vector_unary_functor_base<E, scalar_inverse>;
+	struct vector_unary_inverse : vector_unary_functor_base<E, scalar_inverse> {};
 
 	template 
 	<
@@ -260,7 +267,7 @@ namespace leaves { namespace math
 		static size_type const size = size1;
 		static size_type const complexity = complex<larger_complexity>::value;
 
-		template <typename I>
+		template <size_type I>
 		static value_type apply(expression_type1& e1, expression_type2& e2)
 		{
 			return function_type::apply(e1.get<I>(), e2.get<I>());
@@ -272,17 +279,22 @@ namespace leaves { namespace math
 		}
 	};
 
+	//template <typename E1, typename E2>
+	//using vector_binary_add = vector_binary_functor_base<E1, E2, scalar_add>;
+	//template <typename E1, typename E2>
+	//using vector_binary_sub = vector_binary_functor_base<E1, E2, scalar_sub>;
+	//template <typename E1, typename E2>
+	//using vector_binary_mult = vector_binary_functor_base<E1, E2, scalar_mult>;
+	//template <typename E1, typename E2>
+	//using vector_binary_div = vector_binary_functor_base<E1, E2, scalar_div>;
 	template <typename E1, typename E2>
-	using vector_binary_add = vector_binary_functor_base<E1, E2, scalar_add>;
-
+	struct vector_binary_add : vector_binary_functor_base<E1, E2, scalar_add> {};
 	template <typename E1, typename E2>
-	using vector_binary_sub = vector_binary_functor_base<E1, E2, scalar_sub>;
-
+	struct vector_binary_sub : vector_binary_functor_base<E1, E2, scalar_sub> {};
 	template <typename E1, typename E2>
-	using vector_binary_mult = vector_binary_functor_base<E1, E2, scalar_mult>;
-
+	struct vector_binary_mult : vector_binary_functor_base<E1, E2, scalar_mult> {};
 	template <typename E1, typename E2>
-	using vector_binary_div = vector_binary_functor_base<E1, E2, scalar_div>;
+	struct vector_binary_div : vector_binary_functor_base<E1, E2, scalar_div> {};
 
 	template
 	<
@@ -331,9 +343,13 @@ namespace leaves { namespace math
 		}
 	};
 
+	//template <typename E, typename T>
+	//using vector_scalar_mult = vector_scalar_functor_base<E, T, scalar_mult>;
+	//template <typename E, typename T>
+	//using vector_scalar_div = vector_scalar_functor_base<E, T, scalar_div>;
 	template <typename E, typename T>
-	using vector_scalar_mult = vector_scalar_functor_base<E, T, scalar_mult>;
+	struct vector_scalar_mult : vector_scalar_functor_base<E, T, scalar_mult> {};
+	template <typename E, typename T>
+	struct vector_scalar_div : vector_scalar_functor_base<E, T, scalar_div> {};
 
-	template <typename E, typename T>
-	using vector_scalar_div = vector_scalar_functor_base<E, T, scalar_div>;
 } }

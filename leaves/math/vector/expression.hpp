@@ -78,7 +78,7 @@ namespace leaves { namespace math
 	// policy based design
 	template <typename E, typename F>
 	class vector_unary : 
-		public vector_expression<vector_unary<E, F> >
+		public vector_expression<vector_unary<E, F>>
 	{
 		typedef vector_unary<E, F> this_type;
 	public:			
@@ -160,7 +160,7 @@ namespace leaves { namespace math
 		typedef E expression_type;
 		typedef T scalar_type;
 		typedef F function_type;
-		typedef typename function_type::return_type value_type;
+		typedef typename function_type::value_type value_type;
 		typedef typename function_type::reference reference;
 		typedef typename function_type::base_tag base_tag;
 		static size_type const size = function_type::size;

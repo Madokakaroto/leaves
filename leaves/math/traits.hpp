@@ -203,30 +203,3 @@ namespace leaves { namespace math
 	{
 	};
 } }
-
-// expression traits
-//namespace leaves { namespace math
-//{
-//	template <typename E>
-//	struct expression_tratis_impl;
-//
-//	template <typename E>
-//	struct expression_traits : expression_tratis_impl<std::remove_reference_t<E>>
-//	{
-//	};
-//
-//	template <typename E>
-//	struct expression_tratis_impl<template_expression<E>>
-//	{	
-//	};
-//
-//	template <typename E>
-//	struct expression_tratis_impl<vector_expression<E>>
-//	{
-//	};
-//
-//	template <typename E, typename F>
-//	struct expression_tratis_impl<vector_unary<E, F>>
-//	{
-//	};
-//} }

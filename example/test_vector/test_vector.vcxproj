@@ -91,7 +91,6 @@
     <ClInclude Include="..\..\leaves\math\template_expression.hpp" />
     <ClInclude Include="..\..\leaves\math\traits.hpp" />
     <ClInclude Include="..\..\leaves\math\vector.hpp" />
-    <ClInclude Include="..\..\leaves\math\vector\detail\operator_detail.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\evaluate.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\expression.hpp" />
     <ClInclude Include="..\..\leaves\math\vector\functor.hpp" />
