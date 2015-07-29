@@ -10,14 +10,14 @@
     <Filter Include="leaves\math">
       <UniqueIdentifier>{dda279f3-1067-48c3-b3dd-81e43c33f67c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="leaves\math\interop">
-      <UniqueIdentifier>{091fdf11-f00d-4778-868b-f3e90bce49fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="leaves\math\vector">
       <UniqueIdentifier>{d35e570c-f2a3-41d9-88c1-03d40fe1f9ba}</UniqueIdentifier>
     </Filter>
     <Filter Include="leaves\math\scalar">
       <UniqueIdentifier>{59ebca18-e9f4-46d8-93e7-7ea52fca12b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\matrix">
+      <UniqueIdentifier>{868ab651-3f33-4fb6-b31d-f902d5234208}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +74,18 @@
     </ClInclude>
     <ClInclude Include="..\..\leaves\math\vector\functor.hpp">
       <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\matrix.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\matrix\matrix..hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\matrix\expression.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\leaves\math\matrix\place_hodler.hpp">
+      <Filter>leaves\math\matrix</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

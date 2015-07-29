@@ -209,7 +209,7 @@ namespace leaves { namespace math
 
 		operator value_type() const
 		{
-			function_type::apply(e_);
+			return function_type::apply(e_);
 		}
 	private:
 		expression_type& e_;

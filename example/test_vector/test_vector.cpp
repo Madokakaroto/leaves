@@ -1,4 +1,6 @@
+#include <leaves\math\matrix.hpp>
 #include <leaves\math\vector.hpp>
+
 #include <iostream>
 void main()
 {
@@ -99,10 +101,17 @@ void main()
 		float3 v3 = (v1 + v2(_b, _g, _r, _w))(_r, _b, _g);
 	}
 	
-	//// dot product
-	//{
-	//	float4 v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
-	//	float4 v2 = { 2.0f, 2.0f, 2.0f, 2.0f };
-	//	//auto dot_prod = dot(v1, v2);				// ADL 
-	//}
+	// sum a vector & magnitude a vector 
+	{
+		float4 v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
+		auto s = sum(v1);							// ADL
+		auto m = magnitude(v1);						// ADL
+	}
+	
+	// do product
+	{
+		float4 v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
+		float4 v2 = { 2.0f, 2.0f, 2.0f, 2.0f };
+		auto d = dot(v1, v2);						// ADL
+	}
 }

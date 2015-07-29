@@ -84,6 +84,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\leaves\math.hpp" />
     <ClInclude Include="..\..\leaves\math\forward.hpp" />
+    <ClInclude Include="..\..\leaves\math\matrix.hpp" />
+    <ClInclude Include="..\..\leaves\math\matrix\expression.hpp" />
+    <ClInclude Include="..\..\leaves\math\matrix\matrix..hpp" />
+    <ClInclude Include="..\..\leaves\math\matrix\place_hodler.hpp" />
     <ClInclude Include="..\..\leaves\math\scalar.hpp" />
     <ClInclude Include="..\..\leaves\math\scalar\expresion.hpp" />
     <ClInclude Include="..\..\leaves\math\scalar\functor.hpp" />

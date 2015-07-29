@@ -211,7 +211,6 @@ namespace leaves { namespace math
 	>
 	struct vector_binary_functor_base
 	{
-	private:
 		static_assert(is_vector_expression<E1>::value, "Must be a vector expression!");
 		static_assert(is_vector_expression<E2>::value, "Must be a vector expression!");
 		typedef E1 expression_type1;
@@ -229,20 +228,6 @@ namespace leaves { namespace math
 		static_assert(complexity1 <= 1, "To complex to calculate!");
 		static_assert(complexity2 <= 1, "To complex to calculate!");
 		static size_type const larger_complexity = max<size_type, complexity1, complexity2>::value;
-
-		template <size_type C> // C is short for complexity
-		struct complex
-		{
-			static size_type const value = C;
-		};
-
-		template <>
-		struct complex<0u>
-		{
-			static size_type const value = 1u;
-		};
-		
-	public:
 		typedef BP<value_type1, value_type2> function_type;
 		typedef typename function_type::return_type value_type;
 		typedef value_type reference;
@@ -278,27 +263,12 @@ namespace leaves { namespace math
 	>
 	struct vector_scalar_functor_base
 	{
-	private:
 		static_assert(is_vector_expression<E1>::value, "Must be a vector type!");
 		static_assert(is_scalar<T>::value, "Must be a scalar type!");
+		static_assert(E1::complexity <= 1, "Too complex to calculate!");
 		typedef E1 exprssion_type;
 		typedef typename exprssion_type::value_type evalue_type;
 		typedef T scalar_type;
-		static_assert(exprssion_type::complexity <= 1, "Too complex to calculate!");
-
-		template <size_type C>
-		struct complex
-		{
-			static size_type const value = C;
-		};
-
-		template <>
-		struct complex<0u>
-		{
-			static size_type const value = 1u;
-		};
-
-	public:
 		typedef BP<evalue_type, scalar_type> function_type;
 		typedef typename function_type::return_type value_type;
 		typedef value_type reference;
@@ -331,23 +301,13 @@ namespace leaves { namespace math
 	struct vector_unary_to_scalar_functor_base
 	{
 		static_assert(is_vector_expression<E>::value, "Must be a vector expression!");
+		static_assert(E::complexity <= 1, "Too complex to calculate!");
 		typedef E expression_type;
 		typedef typename expression_type::value_type evalue_type;
-		static_assert(expression_type::complexity <= 1, "Too complex to calculate!");
 		typedef BP<evalue_type, evalue_type> function_type;
 		typedef typename function_type::return_type value_type;
-
-		template <size_type C>
-		struct complexity
-		{
-			static size_type const value = C; // 1 * C
-		};
-
-		template <>
-		struct complexity<0u>
-		{
-			static size_type const value = 1u;
-		};
+		static size_type const complexity = complex<expression_type::complexity>::value;
+		static size_type const size = expression_type::size;
 
 		template <size_type B, size_type E>
 		struct unroll
@@ -367,9 +327,6 @@ namespace leaves { namespace math
 			}
 		};
 
-		static size_type const complexity = complexity<expression_type::complexity>::value;
-		static size_type const size = expression_type::size;
-
 		static value_type apply(expression_type& e)
 		{
 			return unroll<0, size - 1>::apply(e);
@@ -378,4 +335,87 @@ namespace leaves { namespace math
 
 	template <typename E>
 	struct vector_sum : vector_unary_to_scalar_functor_base<E, scalar_add> {};
+
+	template <typename E>
+	struct vector_magnitude
+	{
+		static_assert(is_vector_expression<E>::value, "Must be a vector expression!");
+		static_assert(E::complexity <= 1, "Too complex to calculate!");
+		typedef E expression_type;
+		typedef typename expression_type::value_type evalue_type;
+		typedef scalar_add<evalue_type, evalue_type> reduce_function;
+		typedef scalar_square<evalue_type> map_function;
+		typedef typename reduce_function::return_type value_type;
+		static size_type const complexity = complex<expression_type::complexity>::value;
+		static size_type const size = expression_type::size;
+
+		template <size_type B, size_type E>
+		struct unroll
+		{
+			static value_type apply(expression_type& e)
+			{
+				return reduce_function::apply(map_function::apply(e.get<B>()),
+					unroll<B + 1, E>::apply(e));
+			}
+		};
+
+		template <size_type E>
+		struct unroll<E, E>
+		{
+			static value_type apply(expression_type& e)
+			{
+				return map_function::apply(e.get<E>());
+			}
+		};
+
+		static value_type apply(expression_type& e)
+		{
+			return unroll<0, size - 1>::apply(e);
+		}
+	};
+
+	template <typename E1, typename E2>
+	struct vector_binary_dot
+	{
+		static_assert(is_vector_expression<E1>::value, "Must be a vector expression");
+		static_assert(is_vector_expression<E2>::value, "Must be a vector expression");
+		static_assert(E1::complexity <= 1, "Too complex to calculate!");
+		static_assert(E2::complexity <= 1, "Too complex to calculate!");
+		static_assert(E1::size == E2::size, "Must have the same size!");
+
+		typedef E1 expression_type1;
+		typedef E2 expression_type2;
+		typedef typename expression_type1::value_type value_type1;
+		typedef typename expression_type2::value_type value_type2;
+		typedef scalar_add<value_type1, value_type2> reduce_type;
+		typedef scalar_mult<value_type1, value_type2> map_type;
+		typedef typename reduce_type::return_type value_type;
+		static size_type const complexity = 
+			complex<max<size_type, expression_type1::complexity, expression_type2::complexity>::value>::value;
+		static size_type const size = expression_type1::size;
+
+		template <size_type B, size_type E>
+		struct unroll
+		{
+			static value_type apply(expression_type1& e1, expression_type2& e2)
+			{
+				return reduce_type::apply(map_type::apply(e1.get<B>(), e2.get<B>()), 
+					unroll<B + 1, E>::apply(e1, e2));
+			}
+		};
+
+		template <size_type E>
+		struct unroll<E, E>
+		{
+			static value_type apply(expression_type1& e1, expression_type2& e2)
+			{
+				return map_type::apply(e1.get<E>(), e2.get<E>());
+			}
+		};
+
+		static value_type apply(expression_type1& e1, expression_type2& e2)
+		{
+			return unroll<0, size - 1>::apply(e1, e2);
+		}
+	};
 } }

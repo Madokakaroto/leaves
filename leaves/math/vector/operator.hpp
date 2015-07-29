@@ -117,20 +117,26 @@ namespace leaves { namespace math
 	}
 	
 	template <typename E>
-	auto magnitude(vector_expression<E> const& e)
-		-> typename vector_to_scalar_traits<E, vector_sum>::result_type
+	auto sum(vector_expression<E> const& e)
+		-> typename vector_to_scalar_traits<E, vector_sum>::return_type
 	{
 		typedef typename vector_to_scalar_traits<E, vector_sum>::type expression_type;
 		return expression_type{ get_expression(e) };
 	}
 
-	// return type is value type
-	// return object is a type of scalar expression
-	//// dot product leads to evaluation
-	//template <typename E1, typename E2>
-	//auto dot(vector_expression<E1> const& e1, vector_expression<E2> const& e2)
-	//	-> decltype(reduce<scalar_mult, scalar_add>(e1, e2))
-	//{
-	//	return reduce<scalar_mult, scalar_add>(e1, e2);
-	//}
+	template <typename E>
+	auto magnitude(vector_expression<E> const& e)
+		-> typename vector_to_scalar_traits<E, vector_magnitude>::return_type
+	{
+		typedef typename vector_to_scalar_traits<E, vector_magnitude>::type expression_type;
+		return expression_type{ get_expression(e) };
+	}
+	
+	template <typename E1, typename E2>
+	auto dot(vector_expression<E1> const& e1, vector_expression<E2> const& e2)
+		-> typename vector_binary_to_scalar_traits<E1, E2, vector_binary_dot>::return_type
+	{
+		typedef vector_binary_to_scalar_traits<E1, E2, vector_binary_dot>::type expression_type;
+		return expression_type{ get_expression(e1), get_expression(e2) };
+	}
 } }
