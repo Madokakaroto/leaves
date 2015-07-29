@@ -52,4 +52,7 @@ namespace leaves { namespace math
 
 	template <typename E1, typename E2, typename F>
 	class vector_binary_to_scalar;
+
+	template <typename T, size_t Col, size_t Row, typename M = col_major>
+	class matrix;
 } }
