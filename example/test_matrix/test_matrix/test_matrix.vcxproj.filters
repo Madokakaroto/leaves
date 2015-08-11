@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="leaves">
+      <UniqueIdentifier>{a72e6da2-dd13-41d5-8e14-164a8a9f8402}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math">
+      <UniqueIdentifier>{fd287e7d-77c8-4e4f-811e-dbfa04e78691}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\vector">
+      <UniqueIdentifier>{93a3fa87-a107-4740-95e6-a47a1b7beb00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\matrix">
+      <UniqueIdentifier>{dbabcec9-1bb8-45fc-b34c-f65dbb926898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="leaves\math\scalar">
+      <UniqueIdentifier>{08414567-5f21-49f1-8ee1-88a4de2509c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\leaves\math.hpp">
+      <Filter>leaves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\null_type.hpp">
+      <Filter>leaves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\type_list.hpp">
+      <Filter>leaves</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\forward.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\scalar.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\template_expression.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\traits.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector.hpp">
+      <Filter>leaves\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\expression.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\place_hodler.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\scalar\expresion.hpp">
+      <Filter>leaves\math\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\scalar\functor.hpp">
+      <Filter>leaves\math\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\scalar\traits.hpp">
+      <Filter>leaves\math\scalar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\evaluate.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\expression.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\functor.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\operator.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\place_holder.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\traits.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\vector\vector.hpp">
+      <Filter>leaves\math\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\matrix.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\traits.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\functor.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\layout.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\leaves\math\matrix\operator.hpp">
+      <Filter>leaves\math\matrix</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\test_matrix.cpp">
+      <Filter>leaves</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

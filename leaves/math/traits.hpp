@@ -1,7 +1,7 @@
 #pragma once
 
 #include <type_traits>
-#include <leaves\type_list.hpp>
+#include "..\type_list.hpp"
 //#include "detail\promotion.hpp"
 
 // anonymous namespace to avoid ADL issues
@@ -99,41 +99,31 @@ namespace leaves { namespace math
 	{
 	};
 
-	// is vector
-	template <typename T>
-	struct is_vector : std::false_type
-	{
-	};
-
-	template <typename T, size_type N, typename B>
-	struct is_vector<vector<T, N, B> > : std::true_type
-	{
-	};
-
-	// is vector expression
 	namespace detail
 	{
+		template <typename E>
+		struct is_vector_impl : std::false_type {};
+
+		template <typename T, size_type N, typename B>
+		struct is_vector_impl<vector<T, N, B> > : std::true_type {};
+
 		template <typename E>
 		struct is_vector_expression_impl : std::is_base_of<vector_expression<E>, E>
 		{
 		};
 	}
 
+	// is vector
+	template <typename E>
+	struct is_vector : detail::is_vector_impl<
+		std::remove_const_t<std::remove_reference_t<E> > > 
+	{
+	};
+
+	// is vector expression
 	template <typename E>
 	struct is_vector_expression : detail::is_vector_expression_impl<
-		std::remove_const_t<std::remove_const_t<E> > >
-	{
-	};
-
-	// is matrix
-	template <typename T>
-	struct is_matrix : std::false_type
-	{
-	};
-
-	// is matrix expression
-	template <typename E>
-	struct is_matrix_expression : std::is_base_of<matrix_expression<E>, E>
+		std::remove_reference_t<std::remove_const_t<E> > >
 	{
 	};
 
