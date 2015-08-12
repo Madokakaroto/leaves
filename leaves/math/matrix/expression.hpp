@@ -25,6 +25,7 @@ namespace leaves { namespace math
 			typename expression_type::const_reference> reference;
 		typedef typename expression_type::const_reference const_reference;
 		typedef typename expression_type::major_order major_order;
+		typedef vector<value_type, size(), major_to_base_t<major_order>> row_vector_type;
 
 		static constexpr size_type complexity()
 		{
@@ -37,12 +38,15 @@ namespace leaves { namespace math
 		}
 
 	public:
+	
+		// constructor
 		explicit matrix_row_proxy(expression_type& e)
 			: e_(e)
 		{
 
 		}
 
+		// operator as an l-value
 		value_type& operator() (size_type index)
 		{
 			static_assert(!std::is_const<expression_type>::value, "Cannot conver from a lvalue to rvalue!");
@@ -50,31 +54,46 @@ namespace leaves { namespace math
 			return e_(place_holder::row(), index);
 		}
 
+		// operatro as an r-value
 		value_type operator() (size_type index)
 		{
 			static_assert(complexity() <= 1, "Too complex to calculate!");
 			return e_(place_holder::row(), index);
 		}
 
+		// get as an l-value
 		template <size_type Index>
 		value_type& get()
 		{
 			return operator()(Index);
 		}
 
+		// get as an r-value
 		template <size_type Index>
 		value_type get() const
 		{
 			return operator()(Index);
 		}
 
-		typedef vector<value_type, size(), major_to_base_t<major_order>> row_vector_type;
-
-		row_vector_type& get()
+		// get when do complex calculation
+		row_vector_type get() const
 		{
-
+			return get_impl(std::make_index_sequence<size()>{});
 		}
-
+		
+		template <typename E1>
+		this_type& operator() (vector_expression<E1> const& e1)
+		{
+			//assign
+		}
+		
+	private:
+		template <size_type ... Is>
+		row_vector_type get_impl(std::index_sequence<Is...>)
+		{
+			return row_vector_type{ e_(palce_holder::row(), Is)... };
+		}
+	
 	private:
 		matrix_row_proxy e_;
 	};
